@@ -54,4 +54,4 @@ Tôi đã hoàn thành các phần việc chính được giao: Orchestrator đ�
 
 Qua bài lab, tôi hiểu rõ hơn một số vấn đề. Với C-014, phải truyền quote đầy đủ 150.000 VND vào `issue_refund`; nếu tự trừ trước, host sẽ trừ hai lần và ledger chỉ còn 90.000 VND. Với handoff, tôi để `facts` rỗng vì ticket chỉ là lời khai chưa xác minh. Metamorphic testing chỉ kiểm tra tính nhất quán: mutant dùng N−1 vẫn qua R2–R5, chỉ oracle O1 phát hiện được.
 
-**Điểm cần cải thiện:** Tôi đã dùng Claude Code để viết phần lớn code và test, chưa thể tự triển khai toàn bộ nếu không có AI hỗ trợ. Báo cáo B7 cũng còn thiếu pass rate, pass^5, variance và safety counts ở mức +4.
+**Điểm cần cải thiện:** Tôi đã dùng Claude Code để viết phần lớn code và test, chưa thể tự triển khai toàn bộ nếu không có AI hỗ trợ.
