@@ -26,7 +26,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Quang Đạo (2A202603614) | TV1 — Workflow + Integration + Ledger/Crash/Evaluation | Implement `src/lab8/shapes/workflow.py`, chạy crash suite & benchmark, viết ADR và group report phần TV1 | `src/tests/test_workflow_extra.py`, `src/tests/test_safety_all_shapes.py` |
+| Nguyễn Quang Đạo (2A202603614) | TV1 — Workflow + Integration + Ledger/Crash/Evaluation | `d6bbefc` — Implement `src/lab8/shapes/workflow.py`, chạy crash suite & benchmark, viết ADR và group report phần TV1 | `src/tests/test_workflow_extra.py`, `src/tests/test_safety_all_shapes.py` |
 | | | | |
 
 ## Cá nhân
