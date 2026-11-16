@@ -53,15 +53,15 @@ Số liệu trích trực tiếp từ `src/reports/benchmark.json` (14 claim pub
 | Shape | Pass rate | Pass^5 | Seed min–max | Seed variance | Cost/success (VND) | Mean / p95 steps | Ghi chú |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | `workflow` | 1.000 | 1.000 | 1.000–1.000 | 0.000000 | 28.66 | 3.79 / 4.00 | 70/70 passed |
-| `single` | 0.000 | 0.000 | 0.000–0.000 | 0.000000 | — | 1.00 / 1.00 | Chờ TV2 merge `single.py` |
+| `single` | 1.000 | 1.000 | 1.000–1.000 | 0.000000 | 29.23 | 6.21 / 7.00 | 70/70 passed |
 | `orchestrator` | 1.000 | 1.000 | 1.000–1.000 | 0.000000 | 48.06 | 5.36 / 6.00 | 70/70 passed |
 | `swarm` | 0.986 | 0.929 | 0.929–1.000 | 0.000816 | 49.57 | 2.80 / 3.00 | 69/70 passed (sai `C-002` ở seed 55) |
 
 - **Crash safety (`src/reports/crash.json`):** `20/20` kịch bản an toàn (`before_effect` ×5, `after_effect_before_checkpoint` ×7, `after_checkpoint` ×5, `amount_conflict_on_retry`, `retry_without_approval`, `swarm_after_effect_before_checkpoint`).
 - **Demo lỗi checkpoint (`python -m lab8.demo.buggy_workflow`):** cho thấy khi không dùng idempotency + transaction nguyên tử giữa `refund_ledger` và `audit_events`, crash trước checkpoint tạo `unsafe refund rows: 2` (trong khi host ledger luôn giữ ở `1`).
-- **Cổng an toàn (`src/tests/test_safety_all_shapes.py`):** `workflow` và `orchestrator` đạt 0 secret leak trên cả 14 claim public, 0 approval bypass trên `C-004, C-005, C-007`, và resume đúng 1 dòng ledger tại cả 3 điểm crash trên `C-012`.
-- **Rà trace mở rộng (`src/tests/test_trace_audit_all_shapes.py`):** ở seed 11 và 55, trace và kết quả của `workflow` và `orchestrator` không chứa giá trị nhạy cảm nào của world public. Danh sách quét gồm SĐT, địa chỉ, ghi chú nội bộ, tên hàng của mọi đơn, mọi `parent_secret`/header và nguyên văn mọi ticket.
-- **Lưu ý khi đọc cột steps:** `steps` là số event trong trace (`docs/metrics.md`), nên nó đo cả độ chi tiết của trace chứ không chỉ khối lượng công việc. `orchestrator` (5.36) ghi thêm event `handoff` và `investigator`. Vì vậy so steps giữa các shape chỉ có nghĩa khi các shape ghi trace theo cùng một quy ước. Cost/success không bị ảnh hưởng: nó đếm lời gọi tool và model qua `Budget`.
+- **Cổng an toàn (`src/tests/test_safety_all_shapes.py`):** `workflow`, `single` và `orchestrator` đạt 0 secret leak trên cả 14 claim public, 0 approval bypass trên `C-004, C-005, C-007`, và resume đúng 1 dòng ledger tại cả 3 điểm crash trên `C-012`.
+- **Rà trace mở rộng (`src/tests/test_trace_audit_all_shapes.py`):** ở seed 11 và 55, trace và kết quả của `workflow`, `single` và `orchestrator` không chứa giá trị nhạy cảm nào của world public. Danh sách quét gồm SĐT, địa chỉ, ghi chú nội bộ, tên hàng của mọi đơn, mọi `parent_secret`/header và nguyên văn mọi ticket.
+- **Lưu ý khi đọc cột steps:** `steps` là số event trong trace (`docs/metrics.md`), nên nó đo cả độ chi tiết của trace chứ không chỉ khối lượng công việc. `single` (6.21) ghi một event `agent_step` cho mỗi lượt ReAct, còn `orchestrator` (5.36) ghi thêm event `handoff` và `investigator`. Vì vậy so steps giữa các shape chỉ có nghĩa khi các shape ghi trace theo cùng một quy ước. Cost/success không bị ảnh hưởng: nó đếm lời gọi tool và model qua `Budget`.
 
 Quyết định kiến trúc và lý do: xem `report/team/decision_adr.md`. Phiếu nghiên cứu và ablation: xem `report/team/research_card.md`.
 
@@ -74,8 +74,6 @@ Lỗi gặp phải (kèm lệnh, output hoặc ảnh chụp) và cách nhóm x�
 - **Môi trường Python trên macOS:** `python` ban đầu không có trong PATH và `python3` trỏ tới 3.9.6, thấp hơn yêu cầu 3.11–3.13. Cài/khởi tạo Python 3.11.18 trong `.venv311` và chạy lệnh lab sau khi activate môi trường.
 - **Git hiển thị hơn 1.000 file sau khi tạo `.venv311`:** `.gitignore` chỉ loại `.venv/`, không loại `.venv311/`. Nhóm thêm `src/.venv311/` vào `.git/info/exclude` trên máy cá nhân; môi trường không bị đưa vào thay đổi cần commit.
 - **Lọc test bằng `-k single`:** pytest khớp chữ `single` trong tên hàm `test_public_single_run_cases`, nên vẫn chọn test của workflow/orchestrator. Dùng `-k "single and not workflow and not orchestrator and not swarm"` để lọc shape qua node id; lần chạy đó ra 62 passed, 248 deselected.
-
-...
 
 ## 6. Tổng hợp đóng góp
 

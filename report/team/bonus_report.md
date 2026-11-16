@@ -58,13 +58,13 @@ Sức bắt lỗi của quan hệ mới (mutation check, tự kiểm bằng test
 | Shape | Cost/success chính thức | Cost/success theo `grader_a` | Lệch |
 | --- | ---: | ---: | ---: |
 | `workflow` | 28,66 | 34,39 | +20,0% |
+| `single` | 29,23 | 35,08 | +20,0% |
 | `orchestrator` | 48,06 | 57,67 | +20,0% |
 | `swarm` | 49,57 | 59,45 | +19,9% |
 
 - `grader_b` và `grader_c` khớp số chính thức ở mọi shape.
 - Với `grader_c`, khớp là vì benchmark không có trial `infra_error`: lỗi của nó **tiềm ẩn**, chưa lộ ra.
-- `grader_a` cộng thêm cost của 1 trong 5 seed của mỗi claim. Cost giữa các seed gần bằng nhau nên mức thổi phồng xấp xỉ 1/5. Vì cả ba shape đều chạy 5 seed, thứ hạng cost/success (`workflow` < `orchestrator` < `swarm`) không đổi.
-- `single` chưa có trial pass tại thời điểm chạy nên chưa có cost/success; sẽ chạy lại khi TV2 merge.
+- `grader_a` cộng thêm cost của 1 trong 5 seed của mỗi claim. Cost giữa các seed gần bằng nhau nên mức thổi phồng xấp xỉ 1/5. Vì cả bốn shape đều chạy 5 seed, thứ hạng cost/success (`workflow` < `single` < `orchestrator` < `swarm`) không đổi.
 
 ## Kết luận
 

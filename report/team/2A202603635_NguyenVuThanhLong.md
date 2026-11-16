@@ -3,7 +3,7 @@
 ## 1. Thông tin thành viên
 
 - Họ tên: Nguyễn Vũ Thành Long
-- MSSV: 2A02603635
+- MSSV: 2A202603635
 - Email: 26ai.longnvt2@vinuni.edu.vn
 - GitHub: nvl191
 
@@ -16,7 +16,7 @@ TV2 — Single agent (ReAct) và Research card R4. Phần code chính gồm `src
 - Hoàn thiện shape `single`: vòng ReAct giới hạn 8 lượt, chỉ điều phối các tool đọc `lookup_order` và `compute_compensation`; phần Python gọi host để ghi refund bằng quote đầy đủ. Chuyển tiếp `crash_at`, dùng `finish()` cho kết quả và không ghi ticket hoặc dữ liệu claim nhạy cảm vào trace.
 - Thêm test cho ticket nói sai số ngày ở C-002 trên năm seed, trace và giới hạn lượt, chặn tool ghi refund, cùng claim không tồn tại.
 - Tạo `workflow_nodraft` từ workflow của TV1, chỉ bỏ lời gọi soạn `draft`, rồi benchmark ablation R4 trên cùng public corpus và seeds.
-- Điền Research card R4 và các mục được giao trong group report. Phần code single đã có commit `930961c` (`single ReAct shape`); ablation và các cập nhật báo cáo hiện đang chờ commit.
+- Điền Research card R4 và các mục được giao trong group report. Phần code single đã có commit `930961c` (`single ReAct shape`); ablation và các cập nhật báo cáo nằm trong commit `241f08d`.
 
 ## 4. Bằng chứng
 

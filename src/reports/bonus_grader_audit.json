@@ -440,6 +440,18 @@
             "grader": 4036.92
           },
           {
+            "shape": "single",
+            "metric": "cost_per_success_vnd",
+            "official": 29.23,
+            "grader": 35.076
+          },
+          {
+            "shape": "single",
+            "metric": "total_simulated_cost_vnd",
+            "official": 2046.1,
+            "grader": 2455.32
+          },
+          {
             "shape": "swarm",
             "metric": "cost_per_success_vnd",
             "official": 49.566957,

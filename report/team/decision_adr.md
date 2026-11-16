@@ -9,7 +9,7 @@
 - Pass rate / pass^5 / seed min-max / variance: 1.000 / 1.000 / 1.000-1.000 / 0.000000
 - Cost per success (mô phỏng, VND): 28.66
 - Crash safety: 20/20 (src/reports/crash.json)
-- Secret leak / approval bypass: 0 / 0 (test_safety_all_shapes.py, 70/70 workflow trials)
+- Secret leak / approval bypass: 0 / 0 (src/reports/benchmark.json: 70/70 trial workflow pass, mỗi trial được chấm forbid_substrings và ledger; tests/test_safety_all_shapes.py, tests/test_trace_audit_all_shapes.py)
 
 Ví dụ một dòng đã điền: `- Shape chọn: workflow`, `- Crash safety: 20/20 (src/reports/crash.json)`.
 
@@ -48,7 +48,19 @@ Không đáng đổi trong bài toán hoàn phí LogiX-VN. Ngay cả khi một k
 | `crash` | `at` (chỉ khi có `crash_at`); trace được flush rồi mới ném lại `InjectedCrash` | |
 | `decision` | `status`, `proposal_amount`, `error_reason` | |
 
-Single: *TV2 bổ sung danh sách event sau khi merge `single.py`.*
+**Event của single** (`src/lab8/shapes/single.py`), theo thứ tự:
+
+| Event | Nội dung | Nguồn allowlist |
+| --- | --- | --- |
+| `claim_lookup` | `found`, `claim_id` | Chỉ cờ và mã claim |
+| `decision` | Chỉ ở nhánh thiếu `order_id`: `status: needs_info` | |
+| `agent_step` | Mỗi lượt ReAct: `step`, `selected_tool`, `final` | Chỉ tên tool được chọn, không ghi tham số hay kết quả tool |
+| `react_summary` | `stopped`, `model_calls`, `tool_calls` | Bộ đếm `Budget` |
+| `quote` | `amount_vnd`, `reason`, `clause_ids`, `parts` | Kết quả `compute_compensation` |
+| `crash` | `at` (chỉ khi có `crash_at`); trace được flush rồi mới ném lại `InjectedCrash` | |
+| `host_result` | `ok`, `reason` | Không ghi `effect` thô |
+
+Observation của agent chỉ gồm `claim_id`, `order_id`, `principal_id`. Ticket không vào observation, không vào prompt của MockLLM, và không vào trace.
 
 **Cố ý không ghi, và vì sao:**
 - **Chữ ticket.** Đây là dữ liệu người dùng: có thể chứa câu lệnh injection, số ngày trễ bịa, hoặc chính secret. Shape không dùng ticket để quyết định, nên trace không cần nó.
