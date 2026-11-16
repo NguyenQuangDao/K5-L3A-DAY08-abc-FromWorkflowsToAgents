@@ -6,7 +6,7 @@ Tối đa 5 trang ngoài phụ lục. Số liệu lấy từ file trong `src/rep
 
 - Tên nhóm: `abc` (`K5-L3A-DAY08-abc-FromWorkflowsToAgents`)
 - Thành viên: xem `TEAM.md`
-- Commit chốt (trùng `report/team/decision_adr.md`): `d6bbefc` (cập nhật sau khi tích hợp đủ 3 thành viên)
+- Commit chốt (trùng `report/team/decision_adr.md`): `79b112a` (cập nhật sau khi tích hợp đủ 3 thành viên)
 
 ## 2. Mục tiêu và cách tiếp cận
 

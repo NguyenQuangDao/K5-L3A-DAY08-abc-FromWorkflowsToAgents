@@ -37,7 +37,7 @@
   - `workflow`: `pass_rate = 1.000` (`70/70`), `pass_5 = 1.000`, `seed_variance = 0.000000`, `cost_per_success_vnd = 28.66` VND, `mean_steps = 3.79` (run id mẫu: `R-workflow-C-001-s11`, `R-workflow-C-002-s55`).
   - `swarm`: `pass_rate = 0.986` (`69/70`), `pass_5 = 0.929`, `seed_variance = 0.000816`, `cost_per_success_vnd = 49.57` VND, `mean_steps = 2.80`.
 - Quét `src/traces/R-workflow-*` với `CANARY_`, `0901`, `Duong Bi Mat`, `SECRET_ITEM`, `Bearer`: 0 kết quả khớp.
-- Commit chính: `d6bbefc` (`feat(workflow): implement workflow shape, TV1 tests, reports, and docs`).
+- Commit chính: `79b112a` (cập nhật sau `d6bbefc` — implement `workflow.py`, TV1 tests, reports và docs).
 
 ## 5. Công cụ AI đã dùng
 
