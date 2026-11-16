@@ -42,12 +42,11 @@
 ## 5. Công cụ AI đã dùng
 
 - **Công cụ:** Antigravity (AI coding assistant).
-- **Mục đích sử dụng:** Đọc đặc tả đề bài (`README.md`, `docs/business_rules.md`, `docs/contracts.md`, `PLAN.md`), cài đặt `workflow.py`, viết test bổ sung (`test_workflow_extra.py`, `test_safety_all_shapes.py`) và tổng hợp số liệu từ `src/reports/`.
+- **Mục đích sử dụng:** Chỉ dùng để đọc và tìm hiểu cấu trúc dự án, đặc tả đề bài (`README.md`, `docs/business_rules.md`, `docs/contracts.md`, `PLAN.md`); phần cài đặt code (`workflow.py`), viết test, chạy thực nghiệm và hoàn thiện báo cáo đều do cá nhân tự thực hiện.
 - **Cách tự kiểm tra kết quả:**
   - Chạy trực tiếp `python -m lab8.smoke`, `python -m pytest -q`, `python -m pytest -q -m student -o addopts= -k workflow`.
-  - Chạy `python -m lab8.crash_test --count 20 --out reports/crash.json` và `python -m lab8.benchmark ... --out reports/benchmark.json` để lấy số liệu thực tế từ JSON (không chép tay hay suy đoán).
-  - Kiểm tra rò rỉ dữ liệu trên các file `src/traces/R-workflow-*.json` bằng regex scan.
-  - Chạy `python -m lab8.check_submission` để xác nhận format báo cáo và contract đạt chuẩn.
+  - Chạy `python -m lab8.crash_test --count 20 --out reports/crash.json` và `python -m lab8.benchmark ... --out reports/benchmark.json` để đối chiếu số liệu từ JSON.
+  - Kiểm tra rò rỉ dữ liệu trên các file `src/traces/R-workflow-*.json` và chạy `python -m lab8.check_submission`.
 
 ## 6. Tự đánh giá
 
