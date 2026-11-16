@@ -1,0 +1,478 @@
+{
+  "run_id": "B7-grader-audit-5fd46fdca677",
+  "fixtures_sha256_12": "5fd46fdca677",
+  "relations": {
+    "R1_delay_2_vs_3": "quote(delay=2)=0, quote(delay=3)=shipping_fee (business rule)",
+    "R2_infra_invariance": "adding infra_error trials leaves graded-trial metrics unchanged",
+    "R3_duplicate": "duplicated list: ratios unchanged, totals x2 (pass_5 excluded)",
+    "R3p_duplicate_pass5": "duplicated list: pass_5 unchanged",
+    "R4_permutation": "reversed / shuffled list: whole report unchanged (new)",
+    "R5_failed_cost": "+delta on failed trials: total cost +delta*n_failed exactly (new)",
+    "O1_population_variance": "absolute oracle on fixture a (not metamorphic)"
+  },
+  "R1_delay_2_vs_3": {
+    "relation": "R1_delay_2_vs_3",
+    "holds": true,
+    "deviations": [],
+    "observed": {
+      "delay_2": {
+        "amount_vnd": 0,
+        "reason": "no_entitlement"
+      },
+      "delay_3": {
+        "amount_vnd": 35000,
+        "reason": "entitled",
+        "clause_ids": [
+          "SHIP-LATE-03"
+        ]
+      }
+    }
+  },
+  "matrix": {
+    "grader_a": {
+      "R2_infra_invariance": {
+        "holds": true,
+        "deviations": []
+      },
+      "R3_duplicate": {
+        "holds": false,
+        "deviations": [
+          {
+            "shape": "workflow",
+            "metric": "cost_per_success_vnd",
+            "a": 31.5,
+            "b": 26.277778,
+            "expected_b": 31.5
+          },
+          {
+            "shape": "workflow",
+            "metric": "total_simulated_cost_vnd",
+            "a": 283.5,
+            "b": 473.0,
+            "expected_b": 567.0
+          }
+        ]
+      },
+      "R3p_duplicate_pass5": {
+        "holds": false,
+        "deviations": [
+          {
+            "shape": "workflow",
+            "metric": "pass_5",
+            "a": 0.666667,
+            "b": 0.0,
+            "expected_b": 0.666667
+          }
+        ]
+      },
+      "R4_permutation": {
+        "holds": false,
+        "deviations": [
+          {
+            "shape": "workflow",
+            "metric": "cost_per_success_vnd",
+            "a": 31.5,
+            "b": 31.666667,
+            "expected_b": 31.5,
+            "variant": "reversed"
+          },
+          {
+            "shape": "workflow",
+            "metric": "total_simulated_cost_vnd",
+            "a": 283.5,
+            "b": 285.0,
+            "expected_b": 283.5,
+            "variant": "reversed"
+          },
+          {
+            "shape": "workflow",
+            "metric": "cost_per_success_vnd",
+            "a": 31.5,
+            "b": 31.722222,
+            "expected_b": 31.5,
+            "variant": "shuffled"
+          },
+          {
+            "shape": "workflow",
+            "metric": "total_simulated_cost_vnd",
+            "a": 283.5,
+            "b": 285.5,
+            "expected_b": 283.5,
+            "variant": "shuffled"
+          }
+        ]
+      },
+      "R5_failed_cost": {
+        "holds": false,
+        "deviations": [
+          {
+            "shape": "workflow",
+            "metric": "total_simulated_cost_vnd",
+            "a": 283.5,
+            "b": 683.5,
+            "expected_b": 583.5
+          },
+          {
+            "shape": "workflow",
+            "metric": "cost_per_success_vnd",
+            "a": 31.5,
+            "b": 75.944444,
+            "expected_b": 64.833333
+          }
+        ]
+      },
+      "O1_population_variance": {
+        "holds": true,
+        "deviations": []
+      }
+    },
+    "grader_b": {
+      "R2_infra_invariance": {
+        "holds": true,
+        "deviations": []
+      },
+      "R3_duplicate": {
+        "holds": true,
+        "deviations": []
+      },
+      "R3p_duplicate_pass5": {
+        "holds": false,
+        "deviations": [
+          {
+            "shape": "workflow",
+            "metric": "pass_5",
+            "a": 0.666667,
+            "b": 0.0,
+            "expected_b": 0.666667
+          }
+        ]
+      },
+      "R4_permutation": {
+        "holds": true,
+        "deviations": []
+      },
+      "R5_failed_cost": {
+        "holds": true,
+        "deviations": []
+      },
+      "O1_population_variance": {
+        "holds": true,
+        "deviations": []
+      }
+    },
+    "grader_c": {
+      "R2_infra_invariance": {
+        "holds": false,
+        "deviations": [
+          {
+            "shape": "workflow",
+            "metric": "graded_trials",
+            "a": 12,
+            "b": 16,
+            "expected_b": 12
+          },
+          {
+            "shape": "workflow",
+            "metric": "pass_rate",
+            "a": 0.75,
+            "b": 0.5625,
+            "expected_b": 0.75
+          },
+          {
+            "shape": "workflow",
+            "metric": "pass_5",
+            "a": 0.666667,
+            "b": 0.5,
+            "expected_b": 0.666667
+          },
+          {
+            "shape": "workflow",
+            "metric": "seed_pass_rates",
+            "a": {
+              "11": 0.833333,
+              "22": 0.666667
+            },
+            "b": {
+              "11": 0.625,
+              "22": 0.5
+            },
+            "expected_b": {
+              "11": 0.833333,
+              "22": 0.666667
+            }
+          },
+          {
+            "shape": "workflow",
+            "metric": "seed_variance",
+            "a": 0.006944,
+            "b": 0.003906,
+            "expected_b": 0.006944
+          },
+          {
+            "shape": "workflow",
+            "metric": "seed_min",
+            "a": 0.666667,
+            "b": 0.5,
+            "expected_b": 0.666667
+          },
+          {
+            "shape": "workflow",
+            "metric": "seed_max",
+            "a": 0.833333,
+            "b": 0.625,
+            "expected_b": 0.833333
+          },
+          {
+            "shape": "workflow",
+            "metric": "cost_per_success_vnd",
+            "a": 21.055556,
+            "b": 23.722222,
+            "expected_b": 21.055556
+          },
+          {
+            "shape": "workflow",
+            "metric": "total_simulated_cost_vnd",
+            "a": 189.5,
+            "b": 213.5,
+            "expected_b": 189.5
+          },
+          {
+            "shape": "workflow",
+            "metric": "mean_steps",
+            "a": 4.25,
+            "b": 3.4375,
+            "expected_b": 4.25
+          }
+        ]
+      },
+      "R3_duplicate": {
+        "holds": true,
+        "deviations": []
+      },
+      "R3p_duplicate_pass5": {
+        "holds": false,
+        "deviations": [
+          {
+            "shape": "workflow",
+            "metric": "pass_5",
+            "a": 0.666667,
+            "b": 0.0,
+            "expected_b": 0.666667
+          }
+        ]
+      },
+      "R4_permutation": {
+        "holds": true,
+        "deviations": []
+      },
+      "R5_failed_cost": {
+        "holds": true,
+        "deviations": []
+      },
+      "O1_population_variance": {
+        "holds": true,
+        "deviations": []
+      }
+    },
+    "mutant_unsorted_p95": {
+      "R2_infra_invariance": {
+        "holds": true,
+        "deviations": []
+      },
+      "R3_duplicate": {
+        "holds": true,
+        "deviations": []
+      },
+      "R3p_duplicate_pass5": {
+        "holds": false,
+        "deviations": [
+          {
+            "shape": "workflow",
+            "metric": "pass_5",
+            "a": 0.666667,
+            "b": 0.0,
+            "expected_b": 0.666667
+          }
+        ]
+      },
+      "R4_permutation": {
+        "holds": false,
+        "deviations": [
+          {
+            "shape": "workflow",
+            "metric": "p95_steps",
+            "a": 5.0,
+            "b": 3.0,
+            "expected_b": 5.0,
+            "variant": "reversed"
+          }
+        ]
+      },
+      "R5_failed_cost": {
+        "holds": true,
+        "deviations": []
+      },
+      "O1_population_variance": {
+        "holds": true,
+        "deviations": []
+      }
+    },
+    "mutant_sample_variance": {
+      "R2_infra_invariance": {
+        "holds": true,
+        "deviations": []
+      },
+      "R3_duplicate": {
+        "holds": true,
+        "deviations": []
+      },
+      "R3p_duplicate_pass5": {
+        "holds": false,
+        "deviations": [
+          {
+            "shape": "workflow",
+            "metric": "pass_5",
+            "a": 0.666667,
+            "b": 0.0,
+            "expected_b": 0.666667
+          }
+        ]
+      },
+      "R4_permutation": {
+        "holds": true,
+        "deviations": []
+      },
+      "R5_failed_cost": {
+        "holds": true,
+        "deviations": []
+      },
+      "O1_population_variance": {
+        "holds": false,
+        "deviations": [
+          {
+            "shape": "workflow",
+            "metric": "seed_variance",
+            "a": 0.013889,
+            "b": 0.013889,
+            "expected_b": 0.006944
+          }
+        ]
+      }
+    }
+  },
+  "shared_base_defects": [
+    "R3p_duplicate_pass5"
+  ],
+  "summary": {
+    "grader_a": {
+      "violated": [
+        "R3_duplicate",
+        "R3p_duplicate_pass5",
+        "R4_permutation",
+        "R5_failed_cost"
+      ],
+      "caught_by_old_relations": [
+        "R3_duplicate"
+      ],
+      "caught_by_new_relations": [
+        "R4_permutation",
+        "R5_failed_cost"
+      ],
+      "caught_only_by_oracle": false
+    },
+    "grader_b": {
+      "violated": [
+        "R3p_duplicate_pass5"
+      ],
+      "caught_by_old_relations": [],
+      "caught_by_new_relations": [],
+      "caught_only_by_oracle": false
+    },
+    "grader_c": {
+      "violated": [
+        "R2_infra_invariance",
+        "R3p_duplicate_pass5"
+      ],
+      "caught_by_old_relations": [
+        "R2_infra_invariance"
+      ],
+      "caught_by_new_relations": [],
+      "caught_only_by_oracle": false
+    },
+    "mutant_unsorted_p95": {
+      "violated": [
+        "R3p_duplicate_pass5",
+        "R4_permutation"
+      ],
+      "caught_by_old_relations": [],
+      "caught_by_new_relations": [
+        "R4_permutation"
+      ],
+      "caught_only_by_oracle": false
+    },
+    "mutant_sample_variance": {
+      "violated": [
+        "R3p_duplicate_pass5",
+        "O1_population_variance"
+      ],
+      "caught_by_old_relations": [],
+      "caught_by_new_relations": [],
+      "caught_only_by_oracle": true
+    }
+  },
+  "benchmark_crosscheck": {
+    "source": "reports/benchmark.json",
+    "trials": 280,
+    "by_grader": {
+      "grader_a": {
+        "matches_official": false,
+        "deviations": [
+          {
+            "shape": "orchestrator",
+            "metric": "cost_per_success_vnd",
+            "official": 48.058571,
+            "grader": 57.670286
+          },
+          {
+            "shape": "orchestrator",
+            "metric": "total_simulated_cost_vnd",
+            "official": 3364.1,
+            "grader": 4036.92
+          },
+          {
+            "shape": "swarm",
+            "metric": "cost_per_success_vnd",
+            "official": 49.566957,
+            "grader": 59.451304
+          },
+          {
+            "shape": "swarm",
+            "metric": "total_simulated_cost_vnd",
+            "official": 3420.12,
+            "grader": 4102.14
+          },
+          {
+            "shape": "workflow",
+            "metric": "cost_per_success_vnd",
+            "official": 28.658571,
+            "grader": 34.390286
+          },
+          {
+            "shape": "workflow",
+            "metric": "total_simulated_cost_vnd",
+            "official": 2006.1,
+            "grader": 2407.32
+          }
+        ]
+      },
+      "grader_b": {
+        "matches_official": true,
+        "deviations": []
+      },
+      "grader_c": {
+        "matches_official": true,
+        "deviations": []
+      }
+    }
+  }
+}

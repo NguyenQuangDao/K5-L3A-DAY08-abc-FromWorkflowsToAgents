@@ -23,7 +23,49 @@ Không đáng đổi trong bài toán hoàn phí LogiX-VN. Ngay cả khi một k
 
 ## Trace và bằng chứng
 
-(Mục của TV3 — cập nhật đầy đủ sau khi rà trace cả 3 shape. Hiện tại với `workflow`, trace chỉ ghi các event đã qua allowlist: `claim` (chỉ `found`, `claim_id`, `has_order_id`), `lookup_order` (chỉ `ORDER_FIELDS`), `quote`, `decision`, `host`, `crash`; cố ý loại bỏ `ticket`, `parent_secret`, `raw_headers_json`, `phone`, `address`, `item_name`, `internal_note`.)
+**Nguyên tắc chung cho cả 3 shape.** Trace là ranh giới bảo mật, không phải log debug. Mỗi lần chạy ghi đúng một file `traces/<run_id>.json` (`run_id = R-<shape>-<claim>-s<seed>`), kể cả nhánh trả sớm và nhánh crash. Shape không ghi file nào khác, không `print`. Trace chỉ chứa payload đã qua allowlist trong code; không có chỗ nào dump nguyên một row.
+
+**Event của workflow** (shape chọn, `src/lab8/shapes/workflow.py`), theo thứ tự:
+
+| Event | Nội dung | Nguồn allowlist |
+| --- | --- | --- |
+| `claim` | `found`, `claim_id`, `has_order_id` (claim không tồn tại: `found: false`, `reason`) | Chỉ cờ và mã claim, không copy view |
+| `lookup_order` | View của `lookup_order`: 7 field `ORDER_FIELDS` nếu đơn thấy được; ngược lại chỉ `visible: false`, `reason`, `order_id` | `lab8.tools.ORDER_FIELDS` |
+| `quote` | `amount_vnd`, `reason`, `clause_ids`, `parts` | Kết quả `compute_compensation` |
+| `host` | `ok`, `reason`, `conflict` | Không ghi `effect` thô |
+| `crash` | `at` (chỉ khi có `crash_at`); trace được flush rồi mới ném lại `InjectedCrash` | |
+| `decision` | Chỉ ở nhánh dừng sớm: `needs_info`, `escalated`, `denied` khi quote = 0 | |
+
+**Event của orchestrator** (`src/lab8/shapes/orchestrator.py`), theo thứ tự:
+
+| Event | Nội dung | Nguồn allowlist |
+| --- | --- | --- |
+| `claim` | `found`, `has_order_id` (hai cờ boolean) | Chỉ cờ, không copy view |
+| `handoff` | `handoff.v1` đã sanitize, khóa sắp xếp, `facts = {}`, `allowed_tools` = 3 tool đọc | `make_handoff` → `sanitize` (`ALLOWED_FIELDS`) |
+| `investigator` | View của `lookup_order` và tổng `refund_history` (`refund_count`, `refunded_vnd`) | `lab8.tools.ORDER_FIELDS`; khóa history chọn tay |
+| `quote` | `amount_vnd`, `reason`, `clause_ids`, `parts` | Kết quả `compute_compensation` |
+| `host` | `ok`, `reason`, `conflict`, `committed_vnd` | Không ghi `effect` thô |
+| `crash` | `at` (chỉ khi có `crash_at`); trace được flush rồi mới ném lại `InjectedCrash` | |
+| `decision` | `status`, `proposal_amount`, `error_reason` | |
+
+Single: *TV2 bổ sung danh sách event sau khi merge `single.py`.*
+
+**Cố ý không ghi, và vì sao:**
+- **Chữ ticket.** Đây là dữ liệu người dùng: có thể chứa câu lệnh injection, số ngày trễ bịa, hoặc chính secret. Shape không dùng ticket để quyết định, nên trace không cần nó.
+- **Claim row, `parent_secret`, `raw_headers`.** Chứa `CANARY_SECRET_*` và header `Authorization`. Shape đọc claim qua `get_claim_view`, view này không có các cột đó.
+- **Order row thô (SĐT, địa chỉ, tên hàng, ghi chú nội bộ).** Chỉ ghi view của `lookup_order` (7 field trong `ORDER_FIELDS`). Đơn của principal khác chỉ trả `visible: false` kèm lý do.
+- **Parent context của orchestrator.** Investigator chỉ nhận handoff đã sanitize. Tóm tắt bằng LLM không được dùng thay redaction.
+- **Thông điệp exception.** Nhánh lỗi của orchestrator chỉ ghi `internal_error:<TênLớp>`, vì thông điệp có thể chứa dữ liệu.
+
+**Chứng minh không lộ secret.** Có ba lớp bằng chứng:
+1. **Chặn trong code:** `sanitize` từ chối mọi handoff còn chứa `CANARY_SECRET_`, `parent_secret`, `raw_headers`, kể cả khi secret nằm trong một fact hợp lệ.
+2. **Test máy (chạy trong cổng host `python -m pytest -q`):**
+   - `tests/test_trace_audit_all_shapes.py` chạy workflow, single, orchestrator trên cả 14 claim public ở seed 11 và 55, rồi quét trace + `RunResult` với **mọi** giá trị nhạy cảm có trong world public: SĐT, địa chỉ, ghi chú nội bộ, tên hàng của mọi đơn, mọi `parent_secret` và header, nguyên văn mọi ticket. Phạm vi này rộng hơn `forbid_substrings` của nhãn.
+   - `tests/test_safety_all_shapes.py` (TV1) kiểm `forbid_substrings`, approval bypass và crash.
+   - `tests/test_orchestrator_handoff.py` thêm một claim injection có secret ngay trong ticket, và một exception có secret trong thông điệp.
+3. **Scanner của grader:** grader quét `trace_path` và mọi file `<run_id>*` cùng thư mục. Vì shape không ghi gì ra ngoài chỗ đó, phạm vi quét của scanner trùng với toàn bộ dữ liệu shape để lại.
+
+Nếu trace nằm ngoài chỗ scanner quét được thì không chứng minh được gì. Vì vậy contract fail-closed: thiếu trace, trace cũ, hoặc trace sai `run_id` đều bị tính là fail.
 
 ## Giới hạn
 

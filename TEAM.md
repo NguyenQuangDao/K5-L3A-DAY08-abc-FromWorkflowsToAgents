@@ -13,7 +13,7 @@
 | --: | ---------------- | ----------- | -------------------------- | -------------- | --------------------------------------------------------- |
 |   1 | Nguyễn Quang Đạo | 2A202603614 | 26ai.daonq2@vinuni.edu.vn | NguyenQuangDao | TV1 — Workflow + Integration + Ledger/Crash/Evaluation    |
 |   2 |                  |             |                            |                | TV2 — Single agent (ReAct) + Research card                |
-|   3 |                  |             |                            |                | TV3 — Orchestrator + Handoff + Rà trace/secret + Bonus B7 |
+|   3 | Nguyễn Gia Bảo   | 2A202603647 | 26ai.baong5@vinuni.edu.vn  | Billy3005      | TV3 — Orchestrator + Handoff + Rà trace/secret + Bonus B7 |
 
 Gợi ý chia vai:
 
@@ -27,7 +27,7 @@ Gợi ý chia vai:
 | Người                          | Vai                                                    | Commit                                                                                                               | Test đã thêm hoặc sửa                                                     |
 | ------------------------------ | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | Nguyễn Quang Đạo (2A202603614) | TV1 — Workflow + Integration + Ledger/Crash/Evaluation | `79b112a` — Implement `src/lab8/shapes/workflow.py`, chạy crash suite & benchmark, viết ADR và group report phần TV1 | `src/tests/test_workflow_extra.py`, `src/tests/test_safety_all_shapes.py` |
-|                                |                                                        |                                                                                                                      |                                                                           |
+| Nguyễn Gia Bảo (2A202603647) | TV3 — Orchestrator + Handoff + Rà trace/secret + Bonus B7 | `139fb1a` — Implement `src/lab8/shapes/orchestrator.py`; `d9f04c7` — bonus B7 (`src/bonus/grader_audit.py`, `reports/bonus_grader_audit.json`, `bonus_report.md`); mục "Trace và bằng chứng" trong ADR, group report §3 orchestrator, §8 | `src/tests/test_orchestrator_handoff.py`, `src/tests/test_bonus_grader_audit.py`, `src/tests/test_trace_audit_all_shapes.py` |
 
 ## Cá nhân
 
