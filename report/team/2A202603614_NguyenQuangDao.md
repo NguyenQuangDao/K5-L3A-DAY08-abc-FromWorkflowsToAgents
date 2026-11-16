@@ -42,7 +42,7 @@
 ## 5. Công cụ AI đã dùng
 
 - **Công cụ:** Antigravity (AI coding assistant).
-- **Mục đích sử dụng:** Hỗ trợ đọc đặc tả đề bài (`README.md`, `docs/business_rules.md`, `docs/contracts.md`, `PLAN.md`) và hỗ trợ thực hiện cài đặt `workflow.py`, viết test bổ sung (`test_workflow_extra.py`, `test_safety_all_shapes.py`) và tổng hợp số liệu báo cáo theo dữ liệu và yêu cầu do người làm cung cấp.
+- **Mục đích sử dụng:** Hỗ trợ đọc đặc tả đề bài (`README.md`, `docs/business_rules.md`, `docs/contracts.md`, `PLAN.md`) và hỗ trợ thực hiện cài đặt `workflow.py` và tổng hợp số liệu báo cáo theo dữ liệu và yêu cầu do người làm cung cấp.
 - **Cách tự kiểm tra kết quả:**
   - Chạy trực tiếp `python -m lab8.smoke`, `python -m pytest -q`, `python -m pytest -q -m student -o addopts= -k workflow`.
   - Chạy `python -m lab8.crash_test --count 20 --out reports/crash.json` và `python -m lab8.benchmark ... --out reports/benchmark.json` để đối chiếu số liệu thực tế từ JSON.
