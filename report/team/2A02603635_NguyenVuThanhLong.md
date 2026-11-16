@@ -3,7 +3,7 @@
 ## 1. Thông tin thành viên
 
 - Họ tên: Nguyễn Vũ Thành Long
-- MSSV: 2202603635
+- MSSV: 2A02603635
 - Email: 26ai.longnvt2@vinuni.edu.vn
 - GitHub: nvl191
 
