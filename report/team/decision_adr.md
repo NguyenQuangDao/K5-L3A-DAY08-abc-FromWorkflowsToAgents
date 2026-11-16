@@ -15,11 +15,27 @@ Ví dụ một dòng đã điền: `- Shape chọn: workflow`, `- Crash safety: 
 
 ## Vì sao shape này
 
-Trên cùng bộ 14 claim public × 5 seed (`11, 22, 33, 44, 55`, tổng 70 trial mỗi shape, dữ liệu trong `src/reports/benchmark.json`), `workflow` đạt `pass_rate = 1.000`, `pass_5 = 1.000`, `seed_min = 1.000`, `seed_max = 1.000`, `seed_variance = 0.000000` và `cost_per_success_vnd = 28.66` VND (`mean_steps = 3.79`, `p95_steps = 4.0`). Trong khi đó, `swarm` đạt `pass_rate = 0.986` (`69/70`), `pass_5 = 0.929`, `seed_variance = 0.000816`, `cost_per_success_vnd = 49.57` VND (đắt hơn khoảng 73%) và sai ở `C-002` tại seed `55` vì model tin số ngày trễ ghi trong ticket thay vì dòng DB `orders`. Vì quy trình xử lý claim có đường đi cố định và luật tiền/chính sách hoàn toàn tất định, `workflow` là kiến trúc ít tự chủ nhất mà vẫn giải quyết đúng 100% yêu cầu, không cho model cơ hội đọc nhầm hoặc bị prompt injection từ ticket.
+Cả 4 shape chạy cùng 14 claim public × 5 seed (`11, 22, 33, 44, 55`, 70 trial mỗi shape), cùng MockLLM, bảng giá, tool và evaluator. Số liệu lấy từ `src/reports/benchmark.json`:
+
+| Shape | Pass rate | Pass^5 | Variance | Cost/success (VND) | Model call TB | Tool call TB | Steps TB / p95 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `workflow` (A) | 1.000 | 1.000 | 0.000000 | 28.66 | 0.86 | 2.79 | 3.79 / 4 |
+| `single` (B) | 1.000 | 1.000 | 0.000000 | 29.23 | 2.71 | 2.79 | 6.21 / 7 |
+| `orchestrator` (C) | 1.000 | 1.000 | 0.000000 | 48.06 | 1.93 | 4.64 | 5.36 / 6 |
+| `swarm` (D) | 0.986 | 0.929 | 0.000816 | 49.57 | 3.00 | 4.66 | 2.80 / 3 |
+
+Ba shape của nhóm **ngang nhau về độ đúng**: pass rate 1.000, pass^5 1.000, variance 0. Swarm trượt đúng 1 trial (`R-swarm-C-002-s55`): ở seed 55 nó tin "trễ 5 ngày" trong ticket thay vì `delay_days = 2` của DB. Workflow xử lý đúng chính trial đó (`R-workflow-C-002-s55`, `denied`).
+
+Khi độ đúng ngang nhau, nhóm chọn shape **ít tự chủ nhất**, tức `workflow`. So với `single`, workflow rẻ hơn rất ít (28.66 so với 29.23 VND, khoảng 2%), nhưng khác biệt quan trọng là cấu trúc. Workflow gọi model trung bình 0.86 lần, chỉ để soạn chữ, và đường đi cố định trong code. Single gọi model 2.71 lần và để vòng ReAct chọn tool, tức là thêm một bề mặt có thể sai (chọn sai tool, chạm trần 8 bước) mà không đổi được kết quả nào. So với `orchestrator` và `swarm`, workflow rẻ hơn khoảng 40% (28.66 so với 48.06 và 49.57) vì không có tầng investigator và tool call lặp lại. Mọi quyết định có tiền (quote, approval, trần theo đơn, idempotency) đều nằm trong code và host, nên tự chủ thêm không mang lại lợi ích đo được trên bài toán này.
 
 ## Có đáng đổi lấy multi-agent không
 
-Không đáng đổi trong bài toán hoàn phí LogiX-VN. Ngay cả khi một kiến trúc multi-agent (`orchestrator` hoặc `swarm`) có pass rate cao tương đương hoặc nhỉnh hơn trên các tình huống phức tạp, chi phí mô phỏng trên mỗi lần thành công cao hơn đáng kể (như `swarm` tốn `49.57` VND/success so với `28.66` VND/success của `workflow`) và tồn tại rủi ro dao động theo seed (`seed_variance > 0` khi để model diễn giải ticket). Nhóm giữ `workflow` và chỉ cân nhắc đảo quyết định nếu trên bộ dữ liệu mở rộng xuất hiện nhóm claim đòi hỏi suy luận đa bước hoặc điều phối tool động ngoài phạm vi luồng cố định, khiến `workflow` tụt pass rate xuống dưới ngưỡng `0.75` trong khi một kiến trúc agentic đạt pass rate cao hơn rõ rệt mà không vi phạm 3 điều kiện must-pass.
+Không đáng, trên dữ liệu đo được. Multi-agent ở đây **không nhỉnh hơn về pass rate**: `orchestrator` bằng workflow (1.000), `swarm` thấp hơn (0.986). Trong khi đó cost/success cao hơn khoảng 68–73%. Swarm còn có variance khác 0 (0.000816, seed min 0.929), vì để model diễn giải ticket. Kể cả trong giả định multi-agent nhỉnh hơn 1–2 điểm pass rate, nhóm vẫn giữ workflow nếu chênh lệch đó đi kèm variance > 0. Lý do: ngưỡng hidden tính trên 200 trial, và một shape dao động theo seed khó dự đoán được mức pass trên bộ chưa thấy.
+
+Điều kiện làm quyết định đảo lại:
+- Bộ claim mở rộng có loại việc mà luồng cố định không biểu diễn được, ví dụ phải tra nhiều nguồn tùy nội dung claim, khiến workflow tụt pass rate rõ rệt, trong khi một shape agentic đạt cao hơn mà vẫn giữ 0 secret leak, 0 approval bypass và crash 20/20.
+- Bước đọc dữ liệu trở thành nút thắt về latency và các investigator đọc song song được (xem B1 trong `docs/bonus_topics.md`). Khi đó orchestrator có thể đáng giá dù đắt hơn. Lab này không đo latency, nên điều kiện này chưa kiểm chứng được.
+- Dùng model thật thay MockLLM: nếu model đọc được thông tin hữu ích từ ticket mà dữ liệu có cấu trúc không có, thì phải đo lại.
 
 ## Trace và bằng chứng
 
@@ -81,4 +97,8 @@ Nếu trace nằm ngoài chỗ scanner quét được thì không chứng minh �
 
 ## Giới hạn
 
-MockLLM không phải model sản xuất. Latency để `unavailable`. Không sửa JSON cho đủ 0.75.
+- **MockLLM không phải model sản xuất.** Nó tất định theo seed, nên variance bằng 0 của ba shape nhóm phần lớn do thiết kế: không có bước nào để model quyết định. Đó không phải bằng chứng về độ ổn định của một model thật.
+- **"Agent" trong single và orchestrator là chính sách viết bằng code.** Hàm `decide` của single và danh sách tool của investigator đều cố định. Vì vậy so A/B/C ở đây đo **chi phí cấu trúc** (số lời gọi, số bước), không đo khả năng lập luận của model.
+- **Chi phí là mô phỏng** theo `config/pricing.yaml`, không phải hóa đơn API. Latency là `unavailable`, nên không kết luận gì về tốc độ.
+- **`steps` đếm số event trong trace** (`docs/metrics.md`), nên phụ thuộc cách mỗi shape ghi trace. Ví dụ single ghi mỗi lượt ReAct một event. Không dùng steps để so khối lượng việc giữa các shape.
+- **Bộ public chỉ có 14 claim.** Pass rate 1.000 trên bộ này không bảo đảm đạt ngưỡng hidden (40 claim × 5 seed). Điểm hidden do grader của giảng viên chấm. Nhóm không sửa JSON trong `src/reports/` để đạt ngưỡng.

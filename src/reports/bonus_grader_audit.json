@@ -423,6 +423,13 @@
   "benchmark_crosscheck": {
     "source": "reports/benchmark.json",
     "trials": 280,
+    "seeds": [
+      11,
+      22,
+      33,
+      44,
+      55
+    ],
     "by_grader": {
       "grader_a": {
         "matches_official": false,
@@ -485,6 +492,187 @@
         "matches_official": true,
         "deviations": []
       }
-    }
+    },
+    "metrics": {
+      "official": {
+        "orchestrator": {
+          "pass_rate": 1.0,
+          "pass_5": 1.0,
+          "seed_variance": 0.0,
+          "seed_min": 1.0,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 48.058571,
+          "total_simulated_cost_vnd": 3364.1
+        },
+        "single": {
+          "pass_rate": 1.0,
+          "pass_5": 1.0,
+          "seed_variance": 0.0,
+          "seed_min": 1.0,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 29.23,
+          "total_simulated_cost_vnd": 2046.1
+        },
+        "swarm": {
+          "pass_rate": 0.985714,
+          "pass_5": 0.928571,
+          "seed_variance": 0.000816,
+          "seed_min": 0.928571,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 49.566957,
+          "total_simulated_cost_vnd": 3420.12
+        },
+        "workflow": {
+          "pass_rate": 1.0,
+          "pass_5": 1.0,
+          "seed_variance": 0.0,
+          "seed_min": 1.0,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 28.658571,
+          "total_simulated_cost_vnd": 2006.1
+        }
+      },
+      "grader_a": {
+        "orchestrator": {
+          "pass_rate": 1.0,
+          "pass_5": 1.0,
+          "seed_variance": 0.0,
+          "seed_min": 1.0,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 57.670286,
+          "total_simulated_cost_vnd": 4036.92
+        },
+        "single": {
+          "pass_rate": 1.0,
+          "pass_5": 1.0,
+          "seed_variance": 0.0,
+          "seed_min": 1.0,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 35.076,
+          "total_simulated_cost_vnd": 2455.32
+        },
+        "swarm": {
+          "pass_rate": 0.985714,
+          "pass_5": 0.928571,
+          "seed_variance": 0.000816,
+          "seed_min": 0.928571,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 59.451304,
+          "total_simulated_cost_vnd": 4102.14
+        },
+        "workflow": {
+          "pass_rate": 1.0,
+          "pass_5": 1.0,
+          "seed_variance": 0.0,
+          "seed_min": 1.0,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 34.390286,
+          "total_simulated_cost_vnd": 2407.32
+        }
+      },
+      "grader_b": {
+        "orchestrator": {
+          "pass_rate": 1.0,
+          "pass_5": 1.0,
+          "seed_variance": 0.0,
+          "seed_min": 1.0,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 48.058571,
+          "total_simulated_cost_vnd": 3364.1
+        },
+        "single": {
+          "pass_rate": 1.0,
+          "pass_5": 1.0,
+          "seed_variance": 0.0,
+          "seed_min": 1.0,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 29.23,
+          "total_simulated_cost_vnd": 2046.1
+        },
+        "swarm": {
+          "pass_rate": 0.985714,
+          "pass_5": 0.928571,
+          "seed_variance": 0.000816,
+          "seed_min": 0.928571,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 49.566957,
+          "total_simulated_cost_vnd": 3420.12
+        },
+        "workflow": {
+          "pass_rate": 1.0,
+          "pass_5": 1.0,
+          "seed_variance": 0.0,
+          "seed_min": 1.0,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 28.658571,
+          "total_simulated_cost_vnd": 2006.1
+        }
+      },
+      "grader_c": {
+        "orchestrator": {
+          "pass_rate": 1.0,
+          "pass_5": 1.0,
+          "seed_variance": 0.0,
+          "seed_min": 1.0,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 48.058571,
+          "total_simulated_cost_vnd": 3364.1
+        },
+        "single": {
+          "pass_rate": 1.0,
+          "pass_5": 1.0,
+          "seed_variance": 0.0,
+          "seed_min": 1.0,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 29.23,
+          "total_simulated_cost_vnd": 2046.1
+        },
+        "swarm": {
+          "pass_rate": 0.985714,
+          "pass_5": 0.928571,
+          "seed_variance": 0.000816,
+          "seed_min": 0.928571,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 49.566957,
+          "total_simulated_cost_vnd": 3420.12
+        },
+        "workflow": {
+          "pass_rate": 1.0,
+          "pass_5": 1.0,
+          "seed_variance": 0.0,
+          "seed_min": 1.0,
+          "seed_max": 1.0,
+          "cost_per_success_vnd": 28.658571,
+          "total_simulated_cost_vnd": 2006.1
+        }
+      }
+    },
+    "safety_counts": {
+      "orchestrator": {
+        "trials": 70,
+        "secret_leak": 0,
+        "approval_bypass": 0,
+        "error": 0
+      },
+      "single": {
+        "trials": 70,
+        "secret_leak": 0,
+        "approval_bypass": 0,
+        "error": 0
+      },
+      "swarm": {
+        "trials": 70,
+        "secret_leak": 0,
+        "approval_bypass": 0,
+        "error": 0
+      },
+      "workflow": {
+        "trials": 70,
+        "secret_leak": 0,
+        "approval_bypass": 0,
+        "error": 0
+      }
+    },
+    "crash_safety": "20/20"
   }
 }

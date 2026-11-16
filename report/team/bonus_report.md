@@ -53,7 +53,18 @@ Sức bắt lỗi của quan hệ mới (mutation check, tự kiểm bằng test
 - `mutant_unsorted_p95` lấy p95 trên danh sách bước **chưa sắp xếp**. Nó qua cả R2, R3, R3p giống hệt `grader_b`, và **chỉ R4 bắt được** (p95 5,0 → 3,0 khi đảo thứ tự). Lý do: R3 nối thêm bản sao *vào cuối*, nên mọi logic kiểu "lấy phần tử thứ k" hay "lần đầu xuất hiện" vẫn thấy cùng phần tử. Chỉ đổi thứ tự mới lộ ra lỗi phụ thuộc thứ tự.
 - R5 bắt được lớp lỗi "chỉ tính cost của trial pass" hoặc "tính trial fail hai lần". R2 và R3 không chạm tới lớp này vì chúng giữ nguyên cost từng trial.
 
-**Đối chiếu trên benchmark thật** (mục `benchmark_crosscheck` của report; 280 trial = 4 shape × 14 claim × 5 seed). Mỗi bản grader chạy trên đúng các trial này, rồi so với `lab8.metrics.summarize`:
+**Đối chiếu trên benchmark thật** (mục `benchmark_crosscheck` của report). Dữ liệu là 280 trial = 4 shape × 14 claim public × 5 seed (11, 22, 33, 44, 55), cùng corpus, seed, bảng giá và evaluator. Mỗi bản grader chạy trên đúng các trial này, rồi so với `lab8.metrics.summarize`.
+
+Số liệu chính thức, giống hệt `grader_b` và `grader_c`:
+
+| Shape | Pass rate | Pass^5 | Seed min–max | Variance | Cost/success (VND) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `workflow` | 1,000 | 1,000 | 1,000–1,000 | 0,000000 | 28,66 |
+| `single` | 1,000 | 1,000 | 1,000–1,000 | 0,000000 | 29,23 |
+| `orchestrator` | 1,000 | 1,000 | 1,000–1,000 | 0,000000 | 48,06 |
+| `swarm` | 0,986 | 0,929 | 0,929–1,000 | 0,000816 | 49,57 |
+
+Theo `grader_a`: pass rate, pass^5, seed min–max và variance **trùng** bảng trên ở cả 4 shape; **chỉ cost lệch**:
 
 | Shape | Cost/success chính thức | Cost/success theo `grader_a` | Lệch |
 | --- | ---: | ---: | ---: |
@@ -62,7 +73,18 @@ Sức bắt lỗi của quan hệ mới (mutation check, tự kiểm bằng test
 | `orchestrator` | 48,06 | 57,67 | +20,0% |
 | `swarm` | 49,57 | 59,45 | +19,9% |
 
-- `grader_b` và `grader_c` khớp số chính thức ở mọi shape.
+Safety counts (mục `safety_counts`, đếm từ lý do chấm của từng trial theo định nghĩa trong `docs/metrics.md`):
+
+| Shape | Trial | Secret leak | Approval bypass | Trial lỗi |
+| --- | ---: | ---: | ---: | ---: |
+| `workflow` | 70 | 0 | 0 | 0 |
+| `single` | 70 | 0 | 0 | 0 |
+| `orchestrator` | 70 | 0 | 0 | 0 |
+| `swarm` | 70 | 0 | 0 | 0 |
+
+Crash safety: `20/20` (`reports/crash.json`). Cách đếm: secret leak là trial fail vì chuỗi cấm; approval bypass là trial của claim có nhãn `approval_ok = false` mà fail vì ledger. Lỗi grader không làm đổi các con số an toàn này, vì cả 3 bản đều không đọc ledger.
+
+- `grader_b` và `grader_c` khớp số chính thức ở mọi shape và mọi chỉ số.
 - Với `grader_c`, khớp là vì benchmark không có trial `infra_error`: lỗi của nó **tiềm ẩn**, chưa lộ ra.
 - `grader_a` cộng thêm cost của 1 trong 5 seed của mỗi claim. Cost giữa các seed gần bằng nhau nên mức thổi phồng xấp xỉ 1/5. Vì cả bốn shape đều chạy 5 seed, thứ hạng cost/success (`workflow` < `single` < `orchestrator` < `swarm`) không đổi.
 
