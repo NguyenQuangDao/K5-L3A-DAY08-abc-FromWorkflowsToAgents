@@ -30,7 +30,10 @@ Nhóm 3 người chia việc theo module độc lập (`PLAN.md`): TV1 phụ tr�
 
 ### Shape B — `single` (TV2)
 
-<!-- TV2 bổ sung sau khi hoàn thành single.py -->
+- **ReAct có giới hạn:** `single.py` đọc claim bằng `get_claim_view`, chỉ đưa `claim_id`, `order_id`, `principal_id` vào observation, rồi gọi `run_react` tối đa 8 lượt. Hàm `decide` dùng closure để giữ order giữa các lượt; agent lần lượt chọn `lookup_order` và `compute_compensation`. Mỗi lượt được tính vào `Budget` bằng `MockLLM.complete`.
+- **Quyết định và ghi tiền:** Agent chỉ được chọn tool đọc. Quote được tính trên order trả về từ database, không lấy số liệu trong ticket. Sau vòng ReAct, chính code của shape xử lý kết quả: quote 0 thì `denied`; quote dương thì gọi `issue_refund` với quote đầy đủ và chuyển tiếp `crash_at`. Host tiếp tục kiểm approval, cap theo đơn và idempotency trước khi ghi.
+- **Trace và kiểm tra:** Trace ghi các event `claim_lookup`, `agent_step`, `react_summary`, `quote`, `host_result` (hoặc nhánh quyết định tương ứng), không ghi ticket hay claim/order row thô. Test riêng xác nhận ticket C-002 nói trễ 5 ngày không làm đổi dữ liệu order 2 ngày, kiểm tra giới hạn ReAct/trace, tool ghi bị chặn và claim không tồn tại trả `failed`. Kết quả tự kiểm TV2: 62 test student và 8 test riêng đã qua.
+- **Ablation draft:** Với cùng workflow, public corpus, tool, seed và evaluator, bỏ đúng lời gọi soạn `draft` giữ nguyên 70/70 trial đúng và hạ cost/success mô phỏng từ 28.6586 xuống 27.8571 VND. Chi tiết phương pháp và giới hạn nằm trong research card; kết quả không tự nó chứng minh topology nào tốt hơn.
 
 ### Shape C — `orchestrator` (TV3)
 
@@ -68,6 +71,9 @@ Lỗi gặp phải (kèm lệnh, output hoặc ảnh chụp) và cách nhóm x�
 
 - **`check_submission` không nhận tiêu đề bonus B7.** `docs/bonus_topics.md` có topic B7, nhưng `SUBMISSION.md` và `lab8/check_submission.py` (regex `Bonus report:\s*B[1-6]`) chỉ nhận B1–B6. Lệnh `python -m lab8.check_submission` báo: `[FAIL] report/team/bonus_report.md: tiêu đề phải là '# Bonus report: B1' .. 'B6'`. Nhóm đã hỏi lab coach và giữ tiêu đề `# Bonus report: B7` cho đúng topic. Nhóm không sửa `check_submission.py` (file của đề) và không đổi sang B6 để lách kiểm tra.
 - **`ModuleNotFoundError: No module named 'bonus'`** khi chạy `python -m bonus.grader_audit` ở gốc repo bằng Python hệ thống. Cách xử lý: chạy trong `src/` sau khi activate `.venv`, như mọi lệnh của lab.
+- **Môi trường Python trên macOS:** `python` ban đầu không có trong PATH và `python3` trỏ tới 3.9.6, thấp hơn yêu cầu 3.11–3.13. Cài/khởi tạo Python 3.11.18 trong `.venv311` và chạy lệnh lab sau khi activate môi trường.
+- **Git hiển thị hơn 1.000 file sau khi tạo `.venv311`:** `.gitignore` chỉ loại `.venv/`, không loại `.venv311/`. Nhóm thêm `src/.venv311/` vào `.git/info/exclude` trên máy cá nhân; môi trường không bị đưa vào thay đổi cần commit.
+- **Lọc test bằng `-k single`:** pytest khớp chữ `single` trong tên hàm `test_public_single_run_cases`, nên vẫn chọn test của workflow/orchestrator. Dùng `-k "single and not workflow and not orchestrator and not swarm"` để lọc shape qua node id; lần chạy đó ra 62 passed, 248 deselected.
 
 ...
 
@@ -77,9 +83,7 @@ Chi tiết đóng góp của từng thành viên nằm trong `TEAM.md` (bảng �
 
 ## 7. Hạn chế và hướng cải thiện
 
-MockLLM không phải model sản xuất; latency là `unavailable`. Nêu thêm giới hạn của nhóm và điều kiện làm kết luận thay đổi.
-
-...
+MockLLM tạo kết quả xác định theo seed, nên các lần gọi `think`/`draft` không mô phỏng chất lượng lập luận, độ hữu ích của câu trả lời khách hàng hay độ trễ model thật; latency được ghi `unavailable`. Bộ public có 14 claim, đủ để kiểm tra luật và tạo đối chứng nhưng nhỏ hơn nhiều so với traffic thực tế. Ablation R4 chỉ cho thấy trên setup này, bỏ một lời gọi soạn câu chữ không đổi quyết định nhưng giảm khoảng 0.80 VND mô phỏng mỗi success; nó không chứng minh lợi thế tổng quát giữa workflow và agent topology khác nhau. Kết luận có thể đổi nếu dùng model thật, đo chất lượng phản hồi/latency, thêm claim đại diện hơn hoặc nếu bước soạn lời nhắn ảnh hưởng đến quyết định (điều mà thiết kế hiện tại cố ý ngăn).
 
 ## 8. Tài liệu tham khảo
 
