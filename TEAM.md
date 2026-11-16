@@ -5,7 +5,7 @@
 - Tên nhóm: abc
 - Lớp: L3A
 - Repo nhóm: `K5-L3A-DAY08-abc-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt: `https://github.com/NguyenQuangDao/K5-L3A-DAY08-abc-FromWorkflowsToAgents`, nhánh `main` (đang cập nhật sau khi TV2, TV3 merge)
+- URL repo, nhánh nộp, commit chốt: `https://github.com/NguyenQuangDao/K5-L3A-DAY08-abc-FromWorkflowsToAgents`, nhánh `main`, commit chốt `0c16935`
 
 ## Thành viên
 
