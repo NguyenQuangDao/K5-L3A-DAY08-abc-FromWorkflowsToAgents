@@ -2,17 +2,18 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
+- Tên nhóm: abc
 - Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Repo nhóm: `K5-L3A-DAY08-abc-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- URL repo, nhánh nộp, commit chốt: `https://github.com/NguyenQuangDao/K5-L3A-DAY08-abc-FromWorkflowsToAgents`, nhánh `main` (đang cập nhật sau khi TV2, TV3 merge)
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
+|   1 | Nguyễn Quang Đạo | 2A202603614 | anhdao2292003cxz@gmail.com | NguyenQuangDao | TV1 — Workflow + Integration + Ledger/Crash/Evaluation |
+|   2 | | | | | TV2 — Single agent (ReAct) + Research card |
+|   3 | | | | | TV3 — Orchestrator + Handoff + Rà trace/secret + Bonus B7 |
 
 Gợi ý chia vai:
 
@@ -25,6 +26,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
+| Nguyễn Quang Đạo (2A202603614) | TV1 — Workflow + Integration + Ledger/Crash/Evaluation | Implement `src/lab8/shapes/workflow.py`, chạy crash suite & benchmark, viết ADR và group report phần TV1 | `src/tests/test_workflow_extra.py`, `src/tests/test_safety_all_shapes.py` |
 | | | | |
 
 ## Cá nhân
