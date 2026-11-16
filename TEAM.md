@@ -11,7 +11,7 @@
 
 | STT | Họ tên           | MSSV        | Email                      | GitHub         | Vai trò                                                   |
 | --: | ---------------- | ----------- | -------------------------- | -------------- | --------------------------------------------------------- |
-|   1 | Nguyễn Quang Đạo | 2A202603614 | anhdao2292003cxz@gmail.com | NguyenQuangDao | TV1 — Workflow + Integration + Ledger/Crash/Evaluation    |
+|   1 | Nguyễn Quang Đạo | 2A202603614 | 26ai.daonq2@vinuni.edu.vn | NguyenQuangDao | TV1 — Workflow + Integration + Ledger/Crash/Evaluation    |
 |   2 |                  |             |                            |                | TV2 — Single agent (ReAct) + Research card                |
 |   3 |                  |             |                            |                | TV3 — Orchestrator + Handoff + Rà trace/secret + Bonus B7 |
 

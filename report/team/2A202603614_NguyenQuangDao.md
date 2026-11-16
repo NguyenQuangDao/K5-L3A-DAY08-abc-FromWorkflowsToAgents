@@ -4,7 +4,7 @@
 
 - Họ tên: Nguyễn Quang Đạo
 - MSSV: 2A202603614
-- Email: anhdao2292003cxz@gmail.com
+- Email: 26ai.daonq2@vinuni.edu.vn
 - GitHub: NguyenQuangDao
 
 ## 2. Phần việc phụ trách
