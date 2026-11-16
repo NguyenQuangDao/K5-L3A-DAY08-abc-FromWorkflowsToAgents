@@ -7,8 +7,9 @@
 - Biến cố định / biến thay đổi: cố định fixture, `as_of` 2026-11-15, policy, bộ quan hệ, code kiểm (`bonus/grader_audit.py`). Thay đổi duy nhất: bản `summarize` được kiểm (`grader_a`, `grader_b`, `grader_c`, cộng 2 mutant cố ý hỏng để đo sức bắt lỗi của các quan hệ).
 - Lệnh tái lập (copy-paste được, chạy trong `src/`):
   - `python -m pytest -q tests/test_bonus_grader_audit.py`
-  - `python -m bonus.grader_audit --out reports/bonus_grader_audit.json`
-- File report + run id: `src/reports/bonus_grader_audit.json`, run id `B7-grader-audit-5fd46fdca677` (12 ký tự đầu SHA-256 của 3 fixture; chạy lại ra file giống từng byte, có test kiểm).
+  - `python -m lab8.benchmark --shapes workflow,single,orchestrator,swarm --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/benchmark.json`
+  - `python -m bonus.grader_audit --out reports/bonus_grader_audit.json --benchmark reports/benchmark.json`
+- File report + run id: `src/reports/bonus_grader_audit.json`, run id `B7-grader-audit-5fd46fdca677` (12 ký tự đầu SHA-256 của 3 fixture; chạy lại ra file giống từng byte, có test kiểm). Phần đối chiếu benchmark đọc `src/reports/benchmark.json` (run id từng trial dạng `R-<shape>-<claim>-s<seed>`).
 
 ## Kết quả
 
@@ -52,7 +53,18 @@ Sức bắt lỗi của quan hệ mới (mutation check, tự kiểm bằng test
 - `mutant_unsorted_p95` lấy p95 trên danh sách bước **chưa sắp xếp**. Nó qua cả R2, R3, R3p giống hệt `grader_b`, và **chỉ R4 bắt được** (p95 5,0 → 3,0 khi đảo thứ tự). Lý do: R3 nối thêm bản sao *vào cuối*, nên mọi logic kiểu "lấy phần tử thứ k" hay "lần đầu xuất hiện" vẫn thấy cùng phần tử. Chỉ đổi thứ tự mới lộ ra lỗi phụ thuộc thứ tự.
 - R5 bắt được lớp lỗi "chỉ tính cost của trial pass" hoặc "tính trial fail hai lần". R2 và R3 không chạm tới lớp này vì chúng giữ nguyên cost từng trial.
 
-> Đối chiếu trên `reports/benchmark.json` (chạy `python -m bonus.grader_audit --out reports/bonus_grader_audit.json --benchmark reports/benchmark.json`): **điền sau khi nhóm có benchmark 4 shape chính thức.** Số sẽ lấy từ mục `benchmark_crosscheck` của report, không chép tay.
+**Đối chiếu trên benchmark thật** (mục `benchmark_crosscheck` của report; 280 trial = 4 shape × 14 claim × 5 seed). Mỗi bản grader chạy trên đúng các trial này, rồi so với `lab8.metrics.summarize`:
+
+| Shape | Cost/success chính thức | Cost/success theo `grader_a` | Lệch |
+| --- | ---: | ---: | ---: |
+| `workflow` | 28,66 | 34,39 | +20,0% |
+| `orchestrator` | 48,06 | 57,67 | +20,0% |
+| `swarm` | 49,57 | 59,45 | +19,9% |
+
+- `grader_b` và `grader_c` khớp số chính thức ở mọi shape.
+- Với `grader_c`, khớp là vì benchmark không có trial `infra_error`: lỗi của nó **tiềm ẩn**, chưa lộ ra.
+- `grader_a` cộng thêm cost của 1 trong 5 seed của mỗi claim. Cost giữa các seed gần bằng nhau nên mức thổi phồng xấp xỉ 1/5. Vì cả ba shape đều chạy 5 seed, thứ hạng cost/success (`workflow` < `orchestrator` < `swarm`) không đổi.
+- `single` chưa có trial pass tại thời điểm chạy nên chưa có cost/success; sẽ chạy lại khi TV2 merge.
 
 ## Kết luận
 
@@ -63,8 +75,9 @@ Sức bắt lỗi của quan hệ mới (mutation check, tự kiểm bằng test
 Một lỗi thước đo **vẫn có thể lọt qua mọi quan hệ nhóm đã viết**. `mutant_sample_variance` chia N−1 thay vì N: sai số chỉ là một hệ số cố định, không phụ thuộc thứ tự, không đổi khi nhân đôi, không đụng tới infra hay cost. Vì vậy R2–R5 đều đạt, chỉ oracle O1 (đáp án tính tay 1/144) bắt được. Quan hệ metamorphic hữu ích vì không cần đáp án tuyệt đối cho số tiền hay pass rate, nhưng nó chỉ kiểm *tính nhất quán* giữa các lần chạy. Một công thức sai mà sai nhất quán thì vẫn cần ít nhất một oracle nhỏ tính tay.
 
 Điều kiện làm kết luận đảo lại:
-- Nếu benchmark không bao giờ có trial `infra_error`, lỗi của `grader_c` không đổi số nào.
-- Nếu mỗi claim chỉ có một trial, lỗi của `grader_a` thành một hằng số cộng thêm. Khi đó thứ hạng giữa các shape có cùng số claim có thể không đổi, dù cost/success tuyệt đối vẫn sai.
+- Nếu benchmark không bao giờ có trial `infra_error`, lỗi của `grader_c` không đổi số nào (đúng như đối chiếu trên benchmark public).
+- `grader_a` thổi cost/success khoảng 1/k khi mỗi claim chạy k seed có cost gần bằng nhau. Benchmark public cho thấy thứ hạng không đổi khi mọi shape cùng k. Kết luận "lỗi không đổi thứ hạng" sẽ sai nếu các shape được so trên số seed khác nhau, hoặc cost giữa các seed chênh nhiều (ví dụ một shape gọi model nhiều hơn hẳn ở seed đầu): khi đó mức thổi phồng khác nhau giữa các shape và thứ hạng có thể đảo.
+- Kết luận "lỗi thước đo làm sai so sánh" không phụ thuộc thứ hạng: ADR ghi cost/success tuyệt đối, nên dùng `grader_a` sẽ báo sai con số dù thứ hạng đúng.
 
 ## Giới hạn
 
@@ -72,4 +85,4 @@ Một lỗi thước đo **vẫn có thể lọt qua mọi quan hệ nhóm đã 
 - Fixture nhỏ (1 shape, 2 seed, 4–6 claim), nên số tuyệt đối chỉ minh họa hành vi, không ước lượng mức lệch trên bộ hidden.
 - Hai mutant do nhóm tự viết để đo sức bắt lỗi của quan hệ, không phải lỗi quan sát ngoài thực tế.
 - Lỗi `pass_5` nằm trong `lab8.metrics` (file thước đo, không được sửa), nên chỉ được ghi nhận, không vá.
-- Tiêu đề `B7` chưa được `check_submission` hiện tại nhận (regex `B[1-6]`): nhóm cần hỏi giảng viên cách khai trước khi nộp.
+- `check_submission` hiện chỉ nhận tiêu đề `B1`–`B6` (regex `B[1-6]`), nên tiêu đề `B7` bị báo 1 FAIL. Nhóm đã hỏi lab coach và giữ tiêu đề `B7` cho đúng topic.

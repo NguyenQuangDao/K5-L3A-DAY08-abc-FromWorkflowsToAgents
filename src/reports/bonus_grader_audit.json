@@ -419,5 +419,60 @@
       "caught_by_new_relations": [],
       "caught_only_by_oracle": true
     }
+  },
+  "benchmark_crosscheck": {
+    "source": "reports/benchmark.json",
+    "trials": 280,
+    "by_grader": {
+      "grader_a": {
+        "matches_official": false,
+        "deviations": [
+          {
+            "shape": "orchestrator",
+            "metric": "cost_per_success_vnd",
+            "official": 48.058571,
+            "grader": 57.670286
+          },
+          {
+            "shape": "orchestrator",
+            "metric": "total_simulated_cost_vnd",
+            "official": 3364.1,
+            "grader": 4036.92
+          },
+          {
+            "shape": "swarm",
+            "metric": "cost_per_success_vnd",
+            "official": 49.566957,
+            "grader": 59.451304
+          },
+          {
+            "shape": "swarm",
+            "metric": "total_simulated_cost_vnd",
+            "official": 3420.12,
+            "grader": 4102.14
+          },
+          {
+            "shape": "workflow",
+            "metric": "cost_per_success_vnd",
+            "official": 28.658571,
+            "grader": 34.390286
+          },
+          {
+            "shape": "workflow",
+            "metric": "total_simulated_cost_vnd",
+            "official": 2006.1,
+            "grader": 2407.32
+          }
+        ]
+      },
+      "grader_b": {
+        "matches_official": true,
+        "deviations": []
+      },
+      "grader_c": {
+        "matches_official": true,
+        "deviations": []
+      }
+    }
   }
 }
