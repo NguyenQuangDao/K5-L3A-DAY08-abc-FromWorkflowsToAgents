@@ -99,3 +99,4 @@ def test_crash_at_all_three_points_resumes_once(tmp_path, shape: str, crash_at: 
         assert committed_audit_count(conn, "C-012") == 1
     finally:
         conn.close()
+

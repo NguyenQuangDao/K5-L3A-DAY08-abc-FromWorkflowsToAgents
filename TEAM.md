@@ -9,11 +9,11 @@
 
 ## Thành viên
 
-| STT | Họ tên | MSSV | Email | GitHub | Vai trò |
-| --: | ------ | ---- | ----- | ------ | ------- |
-|   1 | Nguyễn Quang Đạo | 2A202603614 | anhdao2292003cxz@gmail.com | NguyenQuangDao | TV1 — Workflow + Integration + Ledger/Crash/Evaluation |
-|   2 | | | | | TV2 — Single agent (ReAct) + Research card |
-|   3 | | | | | TV3 — Orchestrator + Handoff + Rà trace/secret + Bonus B7 |
+| STT | Họ tên           | MSSV        | Email                      | GitHub         | Vai trò                                                   |
+| --: | ---------------- | ----------- | -------------------------- | -------------- | --------------------------------------------------------- |
+|   1 | Nguyễn Quang Đạo | 2A202603614 | anhdao2292003cxz@gmail.com | NguyenQuangDao | TV1 — Workflow + Integration + Ledger/Crash/Evaluation    |
+|   2 |                  |             |                            |                | TV2 — Single agent (ReAct) + Research card                |
+|   3 |                  |             |                            |                | TV3 — Orchestrator + Handoff + Rà trace/secret + Bonus B7 |
 
 Gợi ý chia vai:
 
@@ -24,10 +24,10 @@ Gợi ý chia vai:
 
 `python -m lab8.check_submission` đọc bảng này bằng máy: giữ nguyên tiêu đề `## Bảng đóng góp` và các cột. Mỗi người một dòng: commit có nội dung và ít nhất một test đã thêm hoặc sửa.
 
-| Người | Vai | Commit | Test đã thêm hoặc sửa |
-| --- | --- | --- | --- |
+| Người                          | Vai                                                    | Commit                                                                                                               | Test đã thêm hoặc sửa                                                     |
+| ------------------------------ | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | Nguyễn Quang Đạo (2A202603614) | TV1 — Workflow + Integration + Ledger/Crash/Evaluation | `d6bbefc` — Implement `src/lab8/shapes/workflow.py`, chạy crash suite & benchmark, viết ADR và group report phần TV1 | `src/tests/test_workflow_extra.py`, `src/tests/test_safety_all_shapes.py` |
-| | | | |
+|                                |                                                        |                                                                                                                      |                                                                           |
 
 ## Cá nhân
 
